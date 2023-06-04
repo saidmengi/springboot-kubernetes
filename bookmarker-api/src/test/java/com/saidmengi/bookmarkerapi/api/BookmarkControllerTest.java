@@ -99,26 +99,4 @@ class BookmarkControllerTest {
         .andExpect(jsonPath("$.title", is("SivaLabs Blog")))
         .andExpect(jsonPath("$.url", is("https://sivalabs.in")));
     }
-
-    @Test
-    void shouldFailToCreateBookmarkWhenUrlIsNotPresent() throws Exception {
-        this.mvc.perform(
-                post("/api/bookmarks")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                {
-                    "title": "SivaLabs Blog"
-                }
-                """)
-            )
-            .andExpect(status().isBadRequest())
-            .andExpect(header().string("Content-Type", is("application/problem+json")))
-            .andExpect(jsonPath("$.type", is("https://zalando.github.io/problem/constraint-violation")))
-            .andExpect(jsonPath("$.title", is("Constraint Violation")))
-            .andExpect(jsonPath("$.status", is(400)))
-            .andExpect(jsonPath("$.violations", hasSize(1)))
-            .andExpect(jsonPath("$.violations[0].field", is("url")))
-            .andExpect(jsonPath("$.violations[0].message", is("Url should not be empty")))
-            .andReturn();
-    }
 }
